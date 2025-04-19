@@ -37,6 +37,11 @@ pipeline {
                 }
             }
         }
+        stage('Validate Inventory') {
+    steps {
+        sh 'ansible-inventory -i ansible/inventory.ini --list'
+    }
+}
 
         stage('Deploy to VM with Ansible') {
             steps {
