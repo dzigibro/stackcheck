@@ -1,27 +1,30 @@
----
 - name: Deploy StackCheck Docker container
   hosts: production
   become: true
-  vars:
-    image_name: noopoo/stackcheck:latest
-
   tasks:
-    - name: Pull latest Docker image
-      docker_image:
-        name: "{{ image_name }}"
-        source: pull
-
-    - name: Ensure container is running
-      docker_container:
-        name: stackcheck
-        image: "{{ image_name }}"
-        state: started
-        restart_policy: always
-        ports:
-          - "80:80"
-    - name: Install Docker
+    - name: Install dependencies
       apt:
-        name: docker.io
+        name:
+          - docker.io
+          - python3-pip
         state: present
         update_cache: true
 
+    - name: Add user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Enable and start Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Pull latest Docker image
+      command: docker pull noopoo/stackcheck:latest
+
+    - name: Run container
+      command: docker run -d -p 80:80 --name stackcheck noopoo/stackcheck:latest
+      ignore_errors: yes  # prevent pipeline from dying if container exists
