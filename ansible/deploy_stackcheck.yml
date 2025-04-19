@@ -9,6 +9,7 @@
           - ufw
         state: present
         update_cache: true
+        
 
     - name: Allow SSH and HTTP through UFW BEFORE enabling it
       ufw:
