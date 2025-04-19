@@ -34,6 +34,7 @@ pipeline {
         stage('Deploy to VM with Ansible') {
             steps {
                 sh 'ansible-playbook -i ansible/hosts.ini ansible/deploy_stackcheck.yml'
+                sh 'ls -la'
             }
         }
     }
