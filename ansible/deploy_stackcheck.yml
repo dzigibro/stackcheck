@@ -6,7 +6,7 @@
       apt:
         name:
           - docker.io
-          - python3-pip
+          - ufw
         state: present
         update_cache: true
 
@@ -22,9 +22,22 @@
         state: started
         enabled: true
 
+    - name: Allow HTTP through UFW
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+    - name: Enable UFW 
+      command: ufw --force enable
+      ignore_errors: yes
+
+    - name: Stop and remove old container
+      command: docker rm -f stackcheck
+      ignore_errors: true
+
     - name: Pull latest Docker image
       command: docker pull noopoo/stackcheck:latest
 
     - name: Run container
       command: docker run -d -p 80:80 --name stackcheck noopoo/stackcheck:latest
-      ignore_errors: yes  # prevent pipeline from dying if container exists
