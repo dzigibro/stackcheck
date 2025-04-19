@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t dzigibro/stackcheck:latest .'
+                sh 'docker build -t noopoo/stackcheck:latest .'
             }
         }
         stage('Push to Docker Hub') {
