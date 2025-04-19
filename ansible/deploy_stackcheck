@@ -1,0 +1,21 @@
+---
+- name: Deploy StackCheck Docker container
+  hosts: production
+  become: true
+  vars:
+    image_name: noopoo/stackcheck:latest
+
+  tasks:
+    - name: Pull latest Docker image
+      docker_image:
+        name: "{{ image_name }}"
+        source: pull
+
+    - name: Ensure container is running
+      docker_container:
+        name: stackcheck
+        image: "{{ image_name }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"

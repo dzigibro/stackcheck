@@ -1,6 +1,0 @@
-- hosts: stackcheck
-  tasks:
-    - name: CheckCheck
-      command: echo "EHO" && sudo reboot 0
-    - name: Rebootus
-      command: sudo reboot 0
