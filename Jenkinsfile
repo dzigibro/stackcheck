@@ -45,8 +45,10 @@ pipeline {
 
         stage('Deploy to VM with Ansible') {
             steps {
-                sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy_stackcheck.yml'
-                sh 'ls -la'
+                sh '''
+                     ANSIBLE_HOST_KEY_CHECKING=False \
+                     ansible-playbook -i ansible/inventory.ini ansible/deploy_stackcheck.yml
+                                                                                               '''
             }
         }
     }
