@@ -41,3 +41,10 @@
 
     - name: Run container
       command: docker run -d -p 80:80 --name stackcheck noopoo/stackcheck:latest
+
+      - name: Run container with restart policy
+      command: >
+    docker run -d -p 80:80 --name stackcheck
+    --restart unless-stopped
+    noopoo/stackcheck:latest
+
