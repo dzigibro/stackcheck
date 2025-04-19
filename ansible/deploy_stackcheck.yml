@@ -10,6 +10,19 @@
         state: present
         update_cache: true
 
+    - name: Allow SSH and HTTP through UFW BEFORE enabling it
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+      loop:
+        - 22
+        - 80
+
+    - name: Enable UFW (now that ports are open)
+      command: ufw --force enable
+      ignore_errors: yes
+
     - name: Add user to docker group
       user:
         name: "{{ ansible_user }}"
@@ -22,17 +35,7 @@
         state: started
         enabled: true
 
-    - name: Allow HTTP through UFW
-      ufw:
-        rule: allow
-        port: '80'
-        proto: tcp
-
-    - name: Enable UFW 
-      command: ufw --force enable
-      ignore_errors: yes
-
-    - name: Stop and remove old container
+    - name: Stop and remove old container if exists
       command: docker rm -f stackcheck
       ignore_errors: true
 
@@ -44,4 +47,3 @@
         docker run -d -p 80:80 --name stackcheck
         --restart unless-stopped
         noopoo/stackcheck:latest
-
