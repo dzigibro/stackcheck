@@ -4,10 +4,17 @@ pipeline {
     stages {
 
         stage('Checkout Source') {
-            steps {
-                checkout scm
-            }
-        }
+    steps {
+        checkout([
+            $class: 'GitSCM',
+            branches: [[name: '*/main']],
+            userRemoteConfigs: [[
+                url: 'https://github.com/dzigibro/stackcheck.git',
+                credentialsId: 'JenkinsGIT'
+            ]]
+        ])
+    }
+}
 
         stage('Debug Workspace') {
             steps {
