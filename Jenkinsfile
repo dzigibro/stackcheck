@@ -2,6 +2,20 @@ pipeline {
     agent any
 
     stages {
+
+        stage('Checkout Source') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Debug Workspace') {
+            steps {
+                sh 'ls -al'
+                sh 'ls -al ansible || echo "ansible directory missing"'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t noopoo/stackcheck:latest .'
