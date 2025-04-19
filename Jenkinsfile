@@ -1,9 +1,12 @@
 pipeline {
     agent any
+    environment {
+        IMAGE = 'noopoo/stackcheck:latest'
+    }
     stages {
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t noopoo/stackcheck:latest .'
+                sh 'docker build -t $IMAGE .'
             }
         }
         stage('Push to Docker Hub') {
